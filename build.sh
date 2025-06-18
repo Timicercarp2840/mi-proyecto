@@ -2,6 +2,10 @@
 # exit on error
 set -o errexit
 
+# Update package list and install PHP and Composer
+apt-get update
+apt-get install -y php php-cli php-pgsql php-mbstring php-xml php-curl composer
+
 # Install PHP dependencies
 composer install --optimize-autoloader --no-dev
 
