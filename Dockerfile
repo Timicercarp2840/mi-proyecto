@@ -16,8 +16,8 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
+# Install PHP extensions including PostgreSQL support
+RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd sodium
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -28,10 +28,11 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy composer files
-COPY composer.json composer.lock ./
+# Copy composer files first
+COPY composer.json ./
+COPY composer.lock* ./
 
-# Install PHP dependencies
+# Install PHP dependencies (now that pgsql extension is available)
 RUN composer install --no-scripts --no-autoloader --optimize-autoloader --no-dev
 
 # Copy package.json files
