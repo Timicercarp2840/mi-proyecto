@@ -1,0 +1,48 @@
+databases:
+  - name: sable-db
+    databaseName: sable
+    user: sable_user
+    plan: free
+
+services:
+  - type: web
+    name: sable-app
+    runtime: php
+    buildCommand: "./build.sh"
+    startCommand: "php artisan serve --host=0.0.0.0 --port=$PORT"
+    plan: free
+    envVars:
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: sable-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: sable-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: sable-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: sable-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: sable-db
+          property: password
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: SESSION_DRIVER
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
