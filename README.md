@@ -1,233 +1,184 @@
-# SABLE - Sistema de Aprendizaje de Base Linux Educativa
+# 🎓 SABLE - Sistema de Aprendizaje de Base Linux Educativa
 
-Sistema completo de aprendizaje en línea desarrollado con Laravel 10 + Vue 3.
+Plataforma educativa interactiva para el aprendizaje de comandos Linux y desarrollo de habilidades tecnológicas. Desarrollada con **Laravel 10**, **Vue 3**, **Inertia.js** y **Tailwind CSS**.
 
-## 🚀 Instalación y Configuración
+## ✨ Características
 
-### Prerrequisitos
-- PHP 8.1 o superior
+### 🎯 **Funcionalidades Principales**
+- **Terminal Interactivo**: Simulador de terminal Linux en el navegador
+- **Sistema de Módulos**: Contenido educativo estructurado por niveles
+- **Desafíos Gamificados**: Retos prácticos con sistema de recompensas
+- **Panel de Administración**: CRUD completo para gestión de contenido
+- **Progreso del Usuario**: Seguimiento detallado de avances
+- **Sistema de Insignias**: Gamificación con logros y recompensas
+- **Dark Mode**: Interfaz adaptable con modo claro/oscuro
+
+### 🎮 **Características Avanzadas**
+- **Evaluaciones Automáticas**: Sistema de validación de comandos
+- **Asignación Automática**: Contenido se asigna automáticamente a nuevos usuarios
+- **Perfil Unificado**: Vista completa de progreso, estadísticas y ranking
+- **Navegación Intuitiva**: Interfaz moderna y responsive
+
+## 🚀 Instalación Local
+
+### **Prerrequisitos**
+- PHP 8.2+
 - Composer
-- Node.js 18 o superior
+- Node.js 18+
 - NPM
-- SQLite (incluido por defecto)
 
-### Pasos de Instalación
-
-1. **Instalar dependencias de PHP**
+### **Configuración Rápida**
 ```bash
+# 1. Clonar el repositorio
+git clone https://github.com/TU_USUARIO/mi-proyecto.git
+cd mi-proyecto
+
+# 2. Instalar dependencias
 composer install
-```
-
-2. **Instalar dependencias de Node.js**
-```bash
 npm install
-```
 
-3. **Configurar la base de datos**
-```bash
+# 3. Configurar entorno
+cp .env.example .env
+php artisan key:generate
+
+# 4. Configurar base de datos y seeders
 php artisan migrate:fresh --seed
-php artisan db:seed --class=AdminUserSeeder
-```
 
-4. **Compilar assets**
-```bash
+# 5. Asignar contenido a usuarios
+php artisan usuarios:asignar-contenido --solo-nuevos
+
+# 6. Compilar assets y ejecutar
 npm run build
-```
-
-5. **Iniciar el servidor**
-```bash
 php artisan serve
 ```
 
-## 👤 Usuarios de Prueba
+## 🔑 Credenciales de Acceso
 
-### Administrador
-- **Email:** admin@sable.com
-- **Contraseña:** admin123
+### 👨‍💼 **Administrador**
+- **Email**: `admin@sable.com`
+- **Contraseña**: `admin123`
+- **Acceso**: Panel de administración completo
 
-### Estudiante
-- **Email:** estudiante@sable.com  
-- **Contraseña:** estudiante123
+### 👨‍🎓 **Estudiante**
+- **Email**: `estudiante@sable.com`
+- **Contraseña**: `estudiante123`
+- **Acceso**: Módulos, desafíos y progreso
 
-## 📚 Funcionalidades
+## 🐳 Deploy en Render.com
 
-### Para Estudiantes
-- ✅ Registro y login
-- ✅ Dashboard con progreso personal
-- ✅ Visualización de módulos por nivel
-- ✅ Realización de evaluaciones interactivas
-- ✅ Seguimiento del progreso
-- ✅ Interfaz responsive
+### **Deploy Automático**
+La aplicación está configurada para deploy automático en Render con Docker:
 
-### Para Administradores
-- ✅ Dashboard con métricas del sistema
-- ✅ CRUD completo de módulos
-- ✅ CRUD completo de evaluaciones
-- ✅ Gestión de usuarios y roles
-- ✅ Visualización de progreso de estudiantes
+1. **Fork/Clone** este repositorio
+2. **Conecta** tu repo a Render.com
+3. **Configura** las variables de entorno:
+   ```
+   APP_URL=https://tu-app.onrender.com
+   ASSET_URL=https://tu-app.onrender.com
+   APP_ENV=production
+   FORCE_HTTPS=true
+   ```
+4. **Deploy automático** se ejecutará usando `render.yaml`
 
-## 🏗️ Arquitectura
-
-### Backend (Laravel 10)
-- **Modelos:** User, Modulo, Evaluacion, Progreso
-- **Controladores:** AuthController, DashboardController, ModuloController, EvaluacionController, ProgresoController, AdminController
-- **Middleware:** AdminMiddleware para proteger rutas de administración
-- **Autenticación:** Laravel Breeze con Inertia.js
-
-### Frontend (Vue 3 + Inertia.js)
-- **Layout:** AuthenticatedLayout con navegación dinámica según rol
-- **Páginas:** Dashboard, módulos, evaluaciones, administración
-- **Estilos:** TailwindCSS para diseño responsive
-- **Estado:** Manejo reactivo con Vue 3 Composition API
-
-### Base de Datos
-- **SQLite** para desarrollo
-- **Migraciones** con estructura completa
-- **Seeders** con datos de prueba
-
-## 📊 Modelo de Datos
-
-### Usuario
-- id, nombre, email, contraseña, rol (estudiante|administrador)
-
-### Módulo  
-- id_modulo, nivel, titulo, descripcion, contenido
-
-### Evaluación
-- id_eval, id_modulo, contenido_eval (JSON con preguntas)
-
-### Progreso
-- id_usuario, id_modulo, estado (en_proceso|completado), puntuacion
-
-## 🛣️ Rutas Principales
-
-### Públicas
-- `/` - Página de bienvenida
-- `/login` - Inicio de sesión
-- `/register` - Registro
-
-### Estudiantes (autenticados)
-- `/dashboard` - Dashboard personal
-- `/modulos` - Lista de módulos
-- `/modulos/{id}` - Ver módulo específico
-- `/evaluaciones/{id}/tomar` - Realizar evaluación
-- `/mi-progreso` - Progreso personal
-
-### Administradores
-- `/admin/dashboard` - Dashboard administrativo
-- `/admin/modulos` - Gestión de módulos
-- `/admin/evaluaciones` - Gestión de evaluaciones
-- `/admin/usuarios` - Gestión de usuarios
-
-## 🎨 Diseño
-
-- **Framework CSS:** TailwindCSS
-- **Componentes:** Diseño modular y reutilizable
-- **Responsive:** Compatible con móviles y tablets
-- **UX:** Interfaz intuitiva y moderna
-- **Accesibilidad:** Implementa buenas prácticas
-
-## 🔧 Desarrollo
-
-### Comandos útiles
-
+### **Variables de Entorno Requeridas**
 ```bash
-# Desarrollo con hot-reload
-npm run dev
-
-# Compilar para producción
-npm run build
-
-# Ejecutar tests
-php artisan test
-
-# Limpiar caché
-php artisan cache:clear
-php artisan config:clear
-php artisan view:clear
-
-# Crear nuevo módulo con evaluación
-php artisan db:seed --class=ModuloSeeder
-php artisan db:seed --class=EvaluacionSeeder
+APP_KEY=base64:TU_KEY_AQUI  # php artisan key:generate --show
+DB_CONNECTION=pgsql         # PostgreSQL automático en Render
+DB_HOST=                    # Render lo llena automáticamente
+DB_DATABASE=                # Render lo llena automáticamente
+DB_USERNAME=                # Render lo llena automáticamente
+DB_PASSWORD=                # Render lo llena automáticamente
 ```
 
-### Estructura de archivos
+## 📁 Estructura del Proyecto
 
+### **Backend (Laravel)**
 ```
 app/
-├── Http/Controllers/     # Controladores
-├── Models/              # Modelos Eloquent
-├── Http/Middleware/     # Middleware personalizado
-└── Providers/          # Service Providers
-
-resources/
-├── js/
-│   ├── Components/     # Componentes Vue reutilizables
-│   ├── Layouts/       # Layouts principales
-│   └── Pages/         # Páginas de la aplicación
-└── css/               # Estilos globales
-
-database/
-├── migrations/        # Migraciones de base de datos
-└── seeders/          # Datos de prueba
+├── Http/Controllers/          # Controladores principales
+│   ├── AdminDesafioController.php    # CRUD de desafíos
+│   ├── PerfilUnificadoController.php # Perfil completo
+│   └── DesafioLibreController.php    # Terminal libre
+├── Models/                    # Modelos de datos
+├── Console/Commands/          # Comandos Artisan
+└── Listeners/                 # Event listeners
 ```
 
-## 🚀 Despliegue
+### **Frontend (Vue 3 + Inertia)**
+```
+resources/js/
+├── Pages/                     # Páginas principales
+│   ├── Admin/                # Dashboard administrativo
+│   ├── Perfil/               # Perfil unificado
+│   ├── DesafioLibre/         # Terminal interactivo
+│   └── Desafios/             # Módulos de aprendizaje
+├── Components/               # Componentes reutilizables
+└── Layouts/                  # Layouts principales
+```
 
-1. **Configurar variables de entorno**
+## 🎮 Módulos Disponibles
+
+1. **📱 Terminal Básico**: Comandos fundamentales (pwd, ls, cd)
+2. **📂 Gestión de Archivos**: Creación, copia, movimiento
+3. **🔍 Búsqueda y Filtrado**: find, grep, ubicación de archivos
+4. **⚙️ Sistema y Procesos**: Gestión del sistema
+5. **🔒 Permisos**: Configuración de permisos y seguridad
+
+## 🛠️ Tecnologías
+
+- **Backend**: Laravel 10, PHP 8.2
+- **Frontend**: Vue 3, Inertia.js, Tailwind CSS
+- **Base de datos**: PostgreSQL (producción), SQLite (desarrollo)
+- **Deploy**: Docker, Render.com
+- **Herramientas**: Vite, Composer, NPM
+
+## 🚀 Comandos Útiles
+
 ```bash
-cp .env.example .env
-php artisan key:generate
+# Desarrollo
+npm run dev              # Servidor de desarrollo
+php artisan serve        # Servidor Laravel
+
+# Producción
+npm run build            # Build de assets
+php artisan optimize     # Optimizar aplicación
+
+# Base de datos
+php artisan migrate:fresh --seed                    # Reiniciar DB
+php artisan usuarios:asignar-contenido --solo-nuevos # Asignar contenido
+
+# Cache
+php artisan cache:clear  # Limpiar cache
+php artisan config:cache # Cache de configuración
 ```
 
-2. **Configurar base de datos en producción**
-```bash
-# En .env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=sable
-DB_USERNAME=usuario
-DB_PASSWORD=contraseña
-```
+## 📊 Estado del Proyecto
 
-3. **Migrar y poblar base de datos**
-```bash
-php artisan migrate --force
-php artisan db:seed --force
-```
+- ✅ **Funcional**: Aplicación completamente operativa
+- ✅ **Deploy Ready**: Configurado para producción en Render
+- ✅ **Docker Ready**: Containerización completa
+- ✅ **HTTPS Configurado**: SSL/TLS en producción
+- ✅ **Responsive**: Adaptable a móviles y desktop
 
-4. **Compilar assets para producción**
-```bash
-npm run build
-```
+## 🎯 Demo
 
-## 📝 Características Técnicas
+**URL de Demo**: [https://sable-app.onrender.com](https://sable-app.onrender.com)
 
-- **Laravel 10** con PHP 8.1+
-- **Vue 3** con Composition API
-- **Inertia.js** para SPA sin APIs
-- **TailwindCSS** para estilos
-- **SQLite/MySQL** como base de datos
-- **Laravel Breeze** para autenticación
-- **Vite** para bundling de assets
-- **Middleware** personalizado para roles
-- **Validaciones** completas en backend y frontend
-- **Responsive design** mobile-first
+Usa las credenciales proporcionadas arriba para probar todas las funcionalidades.
 
-## 🤝 Contribución
+## 📝 Licencia
 
+Este proyecto es de código abierto y está disponible bajo la [Licencia MIT](LICENSE).
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor:
 1. Fork el proyecto
-2. Crea una rama para tu funcionalidad (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crea un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
 ---
 
-**SABLE** - Sistema de Aprendizaje de Base Linux Educativa
-Desarrollado con ❤️ usando Laravel + Vue.js
+**Desarrollado con ❤️ para la educación en tecnología**
