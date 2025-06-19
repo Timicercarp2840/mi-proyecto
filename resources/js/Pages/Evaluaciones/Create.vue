@@ -137,6 +137,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useRoute } from '../../composables/useRoute.js';
+
+const { route } = useRoute();
 
 defineProps({
     modulos: Array,

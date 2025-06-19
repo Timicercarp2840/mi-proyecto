@@ -3,6 +3,9 @@ import { computed } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useRoute } from '../../composables/useRoute.js';
+
+const { route } = useRoute();
 
 const props = defineProps({
     status: {
