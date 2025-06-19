@@ -56,8 +56,7 @@ export function useRoute() {
             Object.keys(params).forEach(key => {
                 url = url.replace(`{${key}}`, params[key]);
             });
-        }
-          return url || '/';
+        }        return url || '/';
     };
 
     // Agregar método current para verificar si la ruta actual coincide
@@ -84,6 +83,7 @@ export function useRoute() {
         return false;
     };
 
+    // La función route ahora tiene el método current anexado
     return {
         route
     };
