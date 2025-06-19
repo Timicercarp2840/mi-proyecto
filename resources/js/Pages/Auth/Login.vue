@@ -6,6 +6,9 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useRoute } from '../../composables/useRoute.js';
+
+const { route } = useRoute();
 
 defineProps({
     canResetPassword: {

@@ -5,9 +5,9 @@
     console.log('Loading route helper...');
     
     // Helper function for routes when Ziggy is not available
-    function route(name, params = {}) {
-        // Basic route mapping for common routes
+    function route(name, params = {}) {        // Basic route mapping for common routes
         const routes = {
+            'home': '/',
             'login': '/login',
             'register': '/register',
             'dashboard': '/dashboard',
