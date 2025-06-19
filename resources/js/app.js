@@ -1,10 +1,13 @@
+// Load route helper FIRST before anything else
+import './route-helper';
+
 import '../css/app.css';
 import './bootstrap';
-import './route-helper';
 
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
+import RoutePlugin from './plugins/route';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -17,7 +20,8 @@ createInertiaApp({
         ),
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
-            .use(plugin);
+            .use(plugin)
+            .use(RoutePlugin); // Añadir plugin de rutas
             
         // ZiggyVue will be available at runtime on the server
         // after composer install and ziggy:generate

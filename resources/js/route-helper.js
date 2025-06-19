@@ -1,5 +1,9 @@
-// Global route helper function
+// Global route helper function - Load immediately
 (function() {
+    'use strict';
+    
+    console.log('Loading route helper...');
+    
     // Helper function for routes when Ziggy is not available
     function route(name, params = {}) {
         // Basic route mapping for common routes
@@ -35,13 +39,19 @@
         return url || '/';
     }
 
-    // Make it globally available
+    // Make it globally available immediately
     if (typeof window !== 'undefined') {
         window.route = route;
+        console.log('Route helper loaded successfully');
     }
     
     // Also make it available as a global for SSR
     if (typeof global !== 'undefined') {
         global.route = route;
+    }
+    
+    // For module systems
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = route;
     }
 })();
