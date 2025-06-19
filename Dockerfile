@@ -2,10 +2,24 @@
 FROM node:18-alpine AS node-builder
 
 WORKDIR /app
+
+# Copiar archivos de configuración
 COPY package*.json ./
+COPY vite.config.js tailwind.config.js postcss.config.js jsconfig.json ./
+
+# Instalar dependencias de Node
 RUN npm ci --silent
-COPY resources/ resources/
-COPY vite.config.js tailwind.config.js postcss.config.js ./
+
+# Copiar archivos fuente
+COPY resources/ ./resources/
+COPY public/ ./public/
+
+# Copiar solo los archivos necesarios de ziggy
+RUN mkdir -p vendor/tightenco/ziggy/dist
+COPY vendor/tightenco/ziggy/dist/ ./vendor/tightenco/ziggy/dist/
+COPY vendor/tightenco/ziggy/package.json ./vendor/tightenco/ziggy/
+
+# Build de assets
 RUN npm run build
 
 # Imagen principal de PHP
