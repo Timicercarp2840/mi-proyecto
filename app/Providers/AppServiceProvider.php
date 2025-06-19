@@ -32,9 +32,12 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
             URL::forceRootUrl($appUrl);
             
-            // Force correct asset URL
-            if (str_contains($appUrl, 'sable-app.onrender.com')) {
+            // Force correct asset URL for Render.com - use relative URLs
+            if (str_contains($appUrl, 'sable-app.onrender.com') || str_contains($appUrl, 'onrender.com')) {
                 URL::forceRootUrl('https://sable-app.onrender.com');
+                
+                // Configure Vite to use relative asset URLs
+                Vite::useHotFile(public_path('hot'));
             }
             
             // Configure Vite to use correct URL
