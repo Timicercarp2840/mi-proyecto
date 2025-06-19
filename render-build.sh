@@ -38,6 +38,18 @@ php artisan migrate:status || echo "⚠️ Base de datos no disponible, continua
 echo "🗄️ Reiniciando base de datos completamente..."
 php artisan migrate:fresh --force --seed
 
+# Verificar usuarios creados
+echo "👤 Verificando usuarios creados..."
+php artisan usuarios:mostrar || echo "⚠️ No se pudo ejecutar comando usuarios:mostrar"
+
+# Asegurar que los usuarios por defecto existen
+echo "🔧 Asegurando usuarios por defecto..."
+php artisan usuarios:crear-defecto || echo "⚠️ No se pudo ejecutar comando usuarios:crear-defecto"
+
+# Debug completo de usuarios
+echo "🔍 Debug completo de usuarios..."
+php artisan usuarios:debug || echo "⚠️ No se pudo ejecutar comando usuarios:debug"
+
 # Asignar contenido a usuarios existentes (por si hay usuarios después del seeding)
 echo "👥 Asignando contenido a usuarios..."
 php artisan usuarios:asignar-contenido --solo-nuevos || echo "⚠️ Comando de asignación no disponible"

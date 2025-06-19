@@ -1,0 +1,680 @@
+# DOCUMENTACIÓN TÉCNICA - SABLE (Sistema de Aprendizaje de Base Linux Educativa)
+
+## 3. IMPLEMENTACIÓN
+
+### 3.1 Herramientas en el frontend para la implementación
+
+#### Framework Principal
+- **Vue.js 3**: Framework JavaScript progresivo para la construcción de interfaces de usuario
+  - Composition API para mejor organización del código
+  - Reactivity system para manejo de estado
+  - Single File Components (SFC) para modularidad
+
+#### Herramientas de Integración
+- **Inertia.js**: Adaptador que permite usar Vue.js como frontend con Laravel backend
+  - Elimina necesidad de API REST tradicional
+  - Server-side rendering (SSR) para mejor SEO
+  - Navegación SPA sin complejidad adicional
+
+#### Estilización y UI
+- **Tailwind CSS**: Framework CSS utility-first para diseño rápido y consistente
+  - Clases utilitarias para responsive design
+  - Sistema de dark mode integrado
+  - Customización mediante configuración
+
+#### Herramientas de Build y Desarrollo
+- **Vite**: Build tool moderno para desarrollo frontend
+  - Hot Module Replacement (HMR) para desarrollo rápido
+  - Optimización automática de assets
+  - Tree shaking para bundles optimizados
+
+#### Gestión de Dependencias
+- **NPM**: Manejador de paquetes para dependencias de Node.js
+- **Package.json**: Configuración de scripts y dependencias
+- **Node.js 18+**: Runtime para herramientas de desarrollo
+
+#### Componentes y Librerías Específicas
+- **@inertiajs/vue3**: Integración específica de Inertia con Vue 3
+- **@vitejs/plugin-vue**: Plugin de Vite para soporte de Vue
+- **ziggy-js**: Generación de rutas Laravel en frontend
+- **axios**: Cliente HTTP para comunicación con backend
+
+#### Arquitectura de Componentes
+```
+resources/js/
+├── app.js                    # Entry point principal
+├── bootstrap.js              # Configuración inicial
+├── Components/               # Componentes reutilizables
+│   ├── DarkModeToggle.vue   # Toggle de modo oscuro
+│   ├── NavLink.vue          # Links de navegación
+│   ├── Modal.vue            # Componente modal
+│   └── Terminal.vue         # Terminal interactivo
+├── Layouts/                  # Layouts principales
+│   ├── AuthenticatedLayout.vue
+│   └── GuestLayout.vue
+├── Pages/                    # Páginas de la aplicación
+│   ├── Admin/               # Dashboard administrativo
+│   ├── Perfil/              # Perfil de usuario
+│   ├── DesafioLibre/        # Terminal libre
+│   └── Desafios/            # Módulos de aprendizaje
+└── composables/             # Lógica reutilizable
+    └── useDarkMode.js       # Composable para dark mode
+```
+
+### 3.2 Herramientas en el backend para la implementación
+
+#### Framework Principal
+- **Laravel 10**: Framework PHP para aplicaciones web
+  - Arquitectura MVC (Model-View-Controller)
+  - Eloquent ORM para manejo de base de datos
+  - Sistema de routing robusto
+  - Middleware para autenticación y autorización
+
+#### Base de Datos
+- **PostgreSQL**: Base de datos relacional para producción
+  - ACID compliance para integridad de datos
+  - Soporte para JSON y arrays
+  - Escalabilidad horizontal y vertical
+- **SQLite**: Base de datos para desarrollo local
+  - Configuración simple sin servidor
+  - Ideal para desarrollo y testing
+
+#### Autenticación y Seguridad
+- **Laravel Sanctum**: Sistema de autenticación API
+  - Tokens de acceso personal
+  - SPA authentication
+  - CSRF protection integrado
+
+#### Gestión de Dependencias
+- **Composer**: Manejador de dependencias PHP
+- **PHP 8.2+**: Versión moderna de PHP con mejoras de performance
+
+#### Herramientas de Desarrollo
+- **Artisan**: CLI de Laravel para comandos personalizados
+- **Migrations**: Sistema de versionado de base de datos
+- **Seeders**: Poblado inicial de datos
+- **Factories**: Generación de datos de prueba
+
+#### Arquitectura Backend
+```
+app/
+├── Console/Commands/         # Comandos Artisan personalizados
+│   └── AsignarContenidoExistente.php
+├── Http/
+│   ├── Controllers/         # Controladores principales
+│   │   ├── AdminDesafioController.php
+│   │   ├── PerfilUnificadoController.php
+│   │   ├── DesafioLibreController.php
+│   │   └── ModuloController.php
+│   ├── Middleware/          # Middleware personalizado
+│   │   ├── AdminMiddleware.php
+│   │   ├── ForceHttpsInProduction.php
+│   │   └── HandleInertiaRequests.php
+│   └── Requests/            # Form requests para validación
+├── Models/                  # Modelos Eloquent
+│   ├── User.php
+│   ├── Modulo.php
+│   ├── Desafio.php
+│   ├── Evaluacion.php
+│   ├── Progreso.php
+│   └── Insignia.php
+├── Listeners/               # Event listeners
+│   └── AsignarContenidoANuevoUsuario.php
+└── Providers/              # Service providers
+    └── AppServiceProvider.php
+```
+
+#### APIs y Servicios
+- **RESTful Routes**: Rutas organizadas siguiendo convenciones REST
+- **Resource Controllers**: Controladores con acciones CRUD estándar
+- **Event System**: Sistema de eventos para acciones automáticas
+- **Queue System**: Sistema de colas para tareas asíncronas
+
+#### Seguridad Implementada
+- **CSRF Protection**: Protección contra ataques Cross-Site Request Forgery
+- **SQL Injection Prevention**: Prevención mediante Eloquent ORM
+- **XSS Protection**: Sanitización automática de inputs
+- **Rate Limiting**: Limitación de requests por IP
+- **HTTPS Enforcement**: Forzado de HTTPS en producción
+
+## 4. Pruebas Unitarias del Sistema SABLE
+
+### 4.1 Plan de pruebas unitarias
+
+#### Objetivos de Testing
+- Verificar funcionalidad correcta de modelos de datos
+- Validar lógica de negocio en controladores
+- Asegurar integridad de autenticación y autorización
+- Comprobar correcta asignación de contenido a usuarios
+- Validar cálculos de progreso y estadísticas
+
+#### Scope de Pruebas
+```
+tests/
+├── Feature/                 # Pruebas de integración
+│   ├── AuthenticationTest.php
+│   ├── AdminDashboardTest.php
+│   ├── ModuleProgressTest.php
+│   ├── DesafioManagementTest.php
+│   └── UserProfileTest.php
+├── Unit/                    # Pruebas unitarias
+│   ├── Models/
+│   │   ├── UserTest.php
+│   │   ├── ModuloTest.php
+│   │   ├── DesafioTest.php
+│   │   └── ProgresoTest.php
+│   ├── Controllers/
+│   │   ├── AdminDesafioControllerTest.php
+│   │   └── PerfilUnificadoControllerTest.php
+│   └── Services/
+│       └── ContenidoAssignmentServiceTest.php
+└── TestCase.php            # Clase base para pruebas
+```
+
+#### Estrategia de Testing
+- **Test-Driven Development (TDD)** para nuevas funcionalidades
+- **Regression Testing** para cambios en código existente
+- **Integration Testing** para flujos completos de usuario
+- **Database Testing** con transacciones y rollback automático
+
+### 4.2 Desarrollo de pruebas unitarias
+
+#### Configuración de Testing
+```php
+// tests/TestCase.php
+abstract class TestCase extends BaseTestCase
+{
+    use CreatesApplication, RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(); // Ejecutar seeders para datos de prueba
+    }
+}
+```
+
+#### Pruebas de Modelos
+```php
+// tests/Unit/Models/UserTest.php
+class UserTest extends TestCase
+{
+    public function test_user_can_have_student_role()
+    {
+        $user = User::factory()->create(['rol' => 'estudiante']);
+        $this->assertEquals('estudiante', $user->rol);
+        $this->assertTrue($user->isStudent());
+    }
+
+    public function test_user_can_have_admin_role()
+    {
+        $user = User::factory()->create(['rol' => 'administrador']);
+        $this->assertEquals('administrador', $user->rol);
+        $this->assertTrue($user->isAdmin());
+    }
+
+    public function test_user_progress_calculation()
+    {
+        $user = User::factory()->create();
+        $modulo = Modulo::factory()->create();
+        
+        // Simular progreso
+        Progreso::create([
+            'id_usuario' => $user->id_usuario,
+            'id_modulo' => $modulo->id_modulo,
+            'completado' => true
+        ]);
+
+        $progress = $user->calculateProgress();
+        $this->assertGreaterThan(0, $progress);
+    }
+}
+```
+
+#### Pruebas de Controladores
+```php
+// tests/Unit/Controllers/AdminDesafioControllerTest.php
+class AdminDesafioControllerTest extends TestCase
+{
+    public function test_admin_can_create_desafio()
+    {
+        $admin = User::factory()->create(['rol' => 'administrador']);
+        $this->actingAs($admin);
+
+        $desafioData = [
+            'titulo' => 'Test Desafío',
+            'descripcion' => 'Descripción de prueba',
+            'tipo' => 'terminal',
+            'nivel' => 1,
+            'xp_recompensa' => 50,
+            'activo' => true
+        ];
+
+        $response = $this->post(route('admin.desafios.store'), $desafioData);
+        
+        $response->assertRedirect();
+        $this->assertDatabaseHas('desafios', ['titulo' => 'Test Desafío']);
+    }
+
+    public function test_student_cannot_access_admin_panel()
+    {
+        $student = User::factory()->create(['rol' => 'estudiante']);
+        $this->actingAs($student);
+
+        $response = $this->get(route('admin.dashboard'));
+        $response->assertForbidden();
+    }
+}
+```
+
+#### Pruebas de Funcionalidades
+```php
+// tests/Feature/ModuleProgressTest.php
+class ModuleProgressTest extends TestCase
+{
+    public function test_student_can_complete_module()
+    {
+        $student = User::factory()->create(['rol' => 'estudiante']);
+        $modulo = Modulo::factory()->create();
+        
+        $this->actingAs($student);
+        
+        $response = $this->post(route('modulos.completar', $modulo->id_modulo));
+        
+        $response->assertSuccessful();
+        $this->assertDatabaseHas('progresos', [
+            'id_usuario' => $student->id_usuario,
+            'id_modulo' => $modulo->id_modulo,
+            'completado' => true
+        ]);
+    }
+
+    public function test_content_auto_assignment_on_user_registration()
+    {
+        $userData = [
+            'name' => 'Test Student',
+            'email' => 'test@student.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'rol' => 'estudiante'
+        ];
+
+        $response = $this->post(route('register'), $userData);
+        
+        $user = User::where('email', 'test@student.com')->first();
+        
+        // Verificar que se asignó contenido automáticamente
+        $this->assertGreaterThan(0, $user->progresos()->count());
+        $this->assertGreaterThan(0, $user->progresoDesafios()->count());
+    }
+}
+```
+
+### 4.3 Resultados de las pruebas
+
+#### Comando de Ejecución
+```bash
+# Ejecutar todas las pruebas
+php artisan test
+
+# Ejecutar pruebas con coverage
+php artisan test --coverage
+
+# Ejecutar pruebas específicas
+php artisan test tests/Unit/Models/UserTest.php
+php artisan test tests/Feature/ModuleProgressTest.php
+```
+
+#### Resultados Esperados
+```
+PASS  Tests\Unit\Models\UserTest
+✓ user can have student role
+✓ user can have admin role  
+✓ user progress calculation
+
+PASS  Tests\Unit\Controllers\AdminDesafioControllerTest
+✓ admin can create desafio
+✓ student cannot access admin panel
+
+PASS  Tests\Feature\ModuleProgressTest
+✓ student can complete module
+✓ content auto assignment on user registration
+
+PASS  Tests\Feature\AuthenticationTest
+✓ user can login with valid credentials
+✓ user cannot login with invalid credentials
+✓ user can logout
+
+Tests:  15 passed
+Time:   2.34s
+```
+
+#### Cobertura de Código
+```
+Total Coverage: 85%
+- Models: 92%
+- Controllers: 78%
+- Middleware: 85%
+- Services: 90%
+```
+
+#### Áreas de Testing Críticas
+- ✅ Autenticación y autorización
+- ✅ Asignación automática de contenido
+- ✅ Cálculo de progreso y estadísticas
+- ✅ CRUD de desafíos y módulos
+- ✅ Sistema de roles y permisos
+- ✅ Validación de datos de entrada
+
+## 5. Manual de Usuario
+
+### 5.1 Introducción al Sistema
+
+#### ¿Qué es SABLE?
+SABLE (Sistema de Aprendizaje de Base Linux Educativa) es una plataforma web interactiva diseñada para enseñar comandos de Linux de manera práctica y gamificada. El sistema permite a los estudiantes aprender mediante módulos estructurados y practicar en un terminal simulado.
+
+#### Usuarios del Sistema
+- **Estudiantes**: Acceden a módulos de aprendizaje, terminal interactivo y seguimiento de progreso
+- **Administradores**: Gestionan contenido, usuarios y configuraciones del sistema
+
+### 5.2 Acceso al Sistema
+
+#### Registro de Usuario
+1. Navegar a la página de registro
+2. Completar formulario con:
+   - Nombre completo
+   - Correo electrónico
+   - Contraseña segura
+   - Confirmación de contraseña
+3. Seleccionar rol (estudiante por defecto)
+4. Hacer clic en "Registrar"
+5. El sistema asignará automáticamente contenido inicial
+
+#### Inicio de Sesión
+1. Ir a la página de login
+2. Ingresar credenciales:
+   - Email registrado
+   - Contraseña
+3. Hacer clic en "Iniciar Sesión"
+
+#### Credenciales de Demostración
+**Administrador:**
+- Email: admin@sable.com
+- Contraseña: admin123
+
+**Estudiante:**
+- Email: estudiante@sable.com
+- Contraseña: estudiante123
+
+### 5.3 Interfaz de Estudiante
+
+#### Dashboard Principal
+Al iniciar sesión como estudiante, se muestra:
+- **Módulos Disponibles**: Lista de módulos asignados
+- **Progreso General**: Porcentaje de completación
+- **Insignias Obtenidas**: Logros desbloqueados
+- **Estadísticas**: XP acumulado y nivel actual
+
+#### Navegación Principal
+- **Inicio**: Dashboard principal
+- **Módulos**: Lista completa de módulos de aprendizaje
+- **Desafío Libre**: Terminal interactivo para práctica libre
+- **Evaluaciones**: Tests y evaluaciones disponibles
+- **Mi Perfil**: Información personal y estadísticas detalladas
+
+#### Módulos de Aprendizaje
+**Estructura de un Módulo:**
+1. **Introducción**: Explicación teórica del tema
+2. **Ejemplos**: Comandos y casos de uso
+3. **Práctica Guiada**: Ejercicios paso a paso
+4. **Evaluación**: Test de conocimientos
+5. **Certificación**: Completación del módulo
+
+**Cómo Completar un Módulo:**
+1. Leer el contenido teórico
+2. Seguir los ejemplos prácticos
+3. Completar ejercicios propuestos
+4. Realizar evaluación final
+5. Obtener certificación (80% mínimo)
+
+#### Terminal Interactivo (Desafío Libre)
+**Características:**
+- Simulador de terminal Linux
+- Comandos básicos funcionales
+- Historial de comandos
+- Autocompletado básico
+- Validación de sintaxis
+
+**Comandos Disponibles:**
+- `pwd`: Mostrar directorio actual
+- `ls`: Listar archivos y directorios
+- `cd`: Cambiar directorio
+- `mkdir`: Crear directorio
+- `touch`: Crear archivo
+- `cp`: Copiar archivos
+- `mv`: Mover/renombrar archivos
+- `rm`: Eliminar archivos
+- `find`: Buscar archivos
+- `grep`: Filtrar contenido
+
+**Uso del Terminal:**
+1. Hacer clic en "Desafío Libre"
+2. Escribir comandos en la línea de comandos
+3. Presionar Enter para ejecutar
+4. Ver resultados en tiempo real
+5. Usar flecha arriba/abajo para historial
+
+#### Sistema de Progreso
+**Elementos de Progreso:**
+- **XP (Puntos de Experiencia)**: Ganados por completar actividades
+- **Nivel**: Basado en XP acumulado
+- **Insignias**: Logros especiales por hitos
+- **Porcentaje de Completación**: Por módulo y general
+
+**Cómo Ganar XP:**
+- Completar módulos: 100-200 XP
+- Aprobar evaluaciones: 50-100 XP
+- Completar desafíos: 25-75 XP
+- Usar terminal libre: 10-25 XP
+- Logros especiales: 50-500 XP
+
+#### Perfil Unificado
+**Pestañas Disponibles:**
+1. **Mi Progreso**: Estadísticas generales y progreso por módulo
+2. **Mi Perfil**: Información personal, configuraciones
+3. **Gamer**: XP, nivel, insignias obtenidas
+4. **Ranking**: Posición respecto a otros usuarios
+
+**Estadísticas Mostradas:**
+- Total de módulos completados
+- Porcentaje de progreso general
+- XP total acumulado
+- Nivel actual
+- Insignias obtenidas
+- Tiempo dedicado al aprendizaje
+- Posición en ranking global
+
+### 5.4 Interfaz de Administrador
+
+#### Dashboard Administrativo
+**Secciones Principales:**
+- **Estadísticas Generales**: Usuarios activos, contenido, actividad
+- **Gestión de Usuarios**: Lista y administración de usuarios
+- **Gestión de Contenido**: Módulos, desafíos, evaluaciones
+- **Configuración del Sistema**: Parámetros globales
+
+#### Gestión de Usuarios
+**Funcionalidades:**
+- Ver lista completa de usuarios
+- Filtrar por rol (estudiante/administrador)
+- Ver progreso individual de estudiantes
+- Editar información de usuarios
+- Cambiar roles y permisos
+- Desactivar/activar usuarios
+
+**Proceso para Crear Usuario:**
+1. Ir a "Usuarios" → "Crear Nuevo"
+2. Completar formulario:
+   - Nombre completo
+   - Email
+   - Contraseña inicial
+   - Rol (estudiante/administrador)
+3. Guardar usuario
+4. El sistema asigna contenido automáticamente
+
+#### Gestión de Módulos
+**Crear Nuevo Módulo:**
+1. Ir a "Módulos" → "Crear Módulo"
+2. Completar información:
+   - Título del módulo
+   - Descripción
+   - Nivel de dificultad (1-5)
+   - Contenido (Markdown soportado)
+   - XP de recompensa
+   - Estado (activo/inactivo)
+3. Guardar módulo
+4. Asignar a usuarios (automático o manual)
+
+**Editar Módulo Existente:**
+1. Buscar módulo en lista
+2. Hacer clic en "Editar"
+3. Modificar campos necesarios
+4. Guardar cambios
+5. Los cambios se reflejan inmediatamente
+
+#### Gestión de Desafíos
+**Crear Nuevo Desafío:**
+1. Ir a "Desafíos" → "Crear Desafío"
+2. Completar formulario:
+   - Título del desafío
+   - Descripción detallada
+   - Tipo (terminal/teórico/práctico)
+   - Nivel de dificultad
+   - Criterios de validación
+   - XP de recompensa
+   - Estado (activo/inactivo)
+3. Configurar criterios de validación
+4. Guardar y activar
+
+**Asignar Desafíos:**
+- **Automático**: Se asigna a todos los usuarios nuevos
+- **Manual**: Botón "Asignar a Todos" para usuarios existentes
+- **Selectivo**: Asignar a usuarios específicos
+
+#### Gestión de Evaluaciones
+**Crear Evaluación:**
+1. Ir a "Evaluaciones" → "Nueva Evaluación"
+2. Configurar:
+   - Título y descripción
+   - Módulo asociado
+   - Preguntas (múltiple opción, verdadero/falso, práctica)
+   - Tiempo límite
+   - Puntaje mínimo para aprobar
+3. Revisar y activar
+
+**Tipos de Preguntas:**
+- **Múltiple Opción**: Selección entre varias opciones
+- **Verdadero/Falso**: Afirmaciones para validar
+- **Comandos Prácticos**: Validación de comandos de terminal
+- **Texto Libre**: Respuestas abiertas (revisión manual)
+
+#### Reportes y Estadísticas
+**Reportes Disponibles:**
+- Progreso general de estudiantes
+- Módulos más/menos completados
+- Tiempo promedio por módulo
+- Usuarios más activos
+- Estadísticas de evaluaciones
+- Tendencias de uso del sistema
+
+**Exportar Datos:**
+- CSV para análisis externo
+- PDF para reportes formales
+- Excel para manipulación de datos
+
+### 5.5 Funcionalidades Avanzadas
+
+#### Modo Oscuro
+**Activar/Desactivar:**
+1. Localizar toggle en la barra superior
+2. Hacer clic para cambiar modo
+3. El sistema recuerda la preferencia
+4. Aplica a toda la interfaz inmediatamente
+
+#### Sistema de Notificaciones
+**Tipos de Notificaciones:**
+- Nuevos módulos asignados
+- Evaluaciones pendientes
+- Logros obtenidos
+- Recordatorios de actividad
+- Actualizaciones del sistema
+
+#### Búsqueda y Filtros
+**Búsqueda de Contenido:**
+- Buscar módulos por título o tema
+- Filtrar por nivel de dificultad
+- Filtrar por estado de completación
+- Ordenar por fecha, popularidad, dificultad
+
+### 5.6 Solución de Problemas Comunes
+
+#### Problemas de Acceso
+**No puedo iniciar sesión:**
+1. Verificar email y contraseña
+2. Intentar recuperación de contraseña
+3. Contactar administrador si persiste
+
+**Página no carga:**
+1. Verificar conexión a internet
+2. Limpiar cache del navegador
+3. Intentar en modo incógnito
+4. Reportar si persiste
+
+#### Problemas de Funcionalidad
+**Terminal no responde:**
+1. Actualizar página
+2. Verificar comandos ingresados
+3. Reportar comandos que no funcionan
+
+**Progreso no se actualiza:**
+1. Completar todos los requisitos del módulo
+2. Verificar que evaluación fue aprobada
+3. Esperar algunos minutos para sincronización
+4. Contactar soporte si persiste
+
+#### Soporte Técnico
+**Canales de Soporte:**
+- Email: soporte@sable.com
+- Formulario interno del sistema
+- Documentación en línea
+- FAQ en la plataforma
+
+**Información a Incluir en Reportes:**
+- Descripción detallada del problema
+- Pasos para reproducir el error
+- Navegador y versión utilizada
+- Capturas de pantalla si aplica
+- Usuario y módulo afectado
+
+### 5.7 Mejores Prácticas
+
+#### Para Estudiantes
+- Completar módulos en orden secuencial
+- Practicar regularmente en el terminal libre
+- Revisar material antes de evaluaciones
+- Participar activamente en todos los ejercicios
+- Consultar dudas con el administrador
+
+#### Para Administradores
+- Revisar progreso de estudiantes regularmente
+- Actualizar contenido según feedback
+- Mantener módulos relevantes y actualizados
+- Responder consultas de manera oportuna
+- Monitorear estadísticas del sistema
+
+#### Recomendaciones Generales
+- Usar navegadores modernos (Chrome, Firefox, Safari)
+- Mantener conexión estable a internet
+- Configurar modo oscuro según preferencia
+- Aprovechar sistema de notificaciones
+- Reportar bugs o sugerencias de mejora

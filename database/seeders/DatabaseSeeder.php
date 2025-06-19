@@ -13,24 +13,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear usuario administrador
-        User::factory()->create([
-            'name' => 'Administrador SABLE',
-            'email' => 'admin@sable.edu',
-            'rol' => 'administrador',
-        ]);
-
-        // Crear usuario estudiante de prueba
-        User::factory()->create([
-            'name' => 'Estudiante Demo',
-            'email' => 'estudiante@sable.edu',
-            'rol' => 'estudiante',
-        ]);
-
-        // Ejecutar otros seeders
+        echo "🌱 Iniciando seeding de la base de datos...\n\n";
+        
+        // Ejecutar seeders en orden
         $this->call([
-            ModuloSeeder::class,
-            EvaluacionSeeder::class,
+            AdminUserSeeder::class,    // Usuarios por defecto
+            ModuloSeeder::class,       // Módulos de aprendizaje
+            EvaluacionSeeder::class,   // Evaluaciones
+            DesafioSeeder::class,      // Desafíos
         ]);
+        
+        echo "🎉 Seeding completado exitosamente!\n";
     }
 }
