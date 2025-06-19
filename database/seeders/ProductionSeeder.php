@@ -31,18 +31,4 @@ class ProductionSeeder extends Seeder
         $this->command->info('Email: admin@sable.edu');
         $this->command->info('Password: admin123');
     }
-}Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
-class ProductionSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        //
-    }
 }
