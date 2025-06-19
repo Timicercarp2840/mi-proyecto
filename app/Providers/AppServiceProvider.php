@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
             }
             
             // Trust ALL proxies for Render.com and force HTTPS detection
-            Request::setTrustedProxies(['*'], Request::HEADER_X_FORWARDED_ALL);
+            Request::setTrustedProxies(['*'], '**');
             
             // Force HTTPS detection even if proxy headers are missing
             if (!request()->isSecure()) {
