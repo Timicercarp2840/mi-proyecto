@@ -14,7 +14,7 @@
 - [ ] `composer.json` actualizado
 - [ ] `package.json` actualizado
 - [ ] Assets compilados con `npm run build`
-- [ ] Comando `asignar:contenido-existente` funcional
+- [ ] Comando `usuarios:asignar-contenido` funcional
 
 ### 🗄️ Base de Datos
 - [ ] Migraciones funcionando correctamente

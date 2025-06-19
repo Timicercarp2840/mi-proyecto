@@ -86,7 +86,7 @@
 
 ### Para Administradores
 1. **Gestionar Desafíos**: Navegar a "Gestión Desafíos" en el navbar
-2. **Asignar Contenido**: Ejecutar `php artisan asignar:contenido-existente`
+2. **Asignar Contenido**: Ejecutar `php artisan usuarios:asignar-contenido --solo-nuevos`
 
 ## Estado del Proyecto
 

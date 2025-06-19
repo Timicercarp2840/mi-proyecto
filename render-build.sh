@@ -40,7 +40,7 @@ php artisan migrate:fresh --force --seed
 
 # Asignar contenido a usuarios existentes (por si hay usuarios después del seeding)
 echo "👥 Asignando contenido a usuarios..."
-php artisan asignar:contenido-existente || echo "⚠️ Comando de asignación no disponible"
+php artisan usuarios:asignar-contenido --solo-nuevos || echo "⚠️ Comando de asignación no disponible"
 
 # Crear enlaces de storage
 echo "🔗 Creando enlaces de storage..."

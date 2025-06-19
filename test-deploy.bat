@@ -34,7 +34,7 @@ php artisan migrate:fresh --force --seed
 
 REM Asignar contenido
 echo 👥 Asignando contenido a usuarios...
-php artisan asignar:contenido-existente
+php artisan usuarios:asignar-contenido --solo-nuevos
 
 REM Optimizar para producción
 echo ⚡ Optimizando para producción...
