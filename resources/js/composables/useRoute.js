@@ -57,10 +57,8 @@ export function useRoute() {
                 url = url.replace(`{${key}}`, params[key]);
             });
         }        return url || '/';
-    };
-
-    // Agregar método current para verificar si la ruta actual coincide
-    route.current = (name) => {
+    };    // Agregar método current para verificar si la ruta actual coincide
+    const current = (name) => {
         if (typeof window !== 'undefined' && window.route && window.route.current) {
             return window.route.current(name);
         }
@@ -82,6 +80,9 @@ export function useRoute() {
         
         return false;
     };
+
+    // Adjuntar el método current a la función route
+    route.current = current;
 
     // La función route ahora tiene el método current anexado
     return {
