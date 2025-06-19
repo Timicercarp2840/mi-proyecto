@@ -52,7 +52,7 @@ npm run build
 php artisan serve
 ```
 
-## 🔑 Credenciales de Acceso
+## 🔑 Credenciales de Acceso (por seguridad solo funciona en la implementacion local, no en la pagina de render)
 
 ### 👨‍💼 **Administrador**
 - **Email**: `admin@sable.com`
