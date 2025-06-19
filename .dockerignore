@@ -15,9 +15,8 @@ storage/framework/sessions/*
 storage/framework/views/*
 bootstrap/cache/*
 
-# Assets no compilados
-resources/js/
-resources/css/
+# Assets compilados (se generan durante el build)
+public/build/
 
 # Tests
 tests/
