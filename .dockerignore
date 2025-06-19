@@ -1,0 +1,45 @@
+# Archivos de desarrollo
+.env
+.env.local
+.env.testing
+.env.backup
+
+# Dependencias
+node_modules/
+vendor/
+
+# Cache y logs
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+
+# Assets no compilados
+resources/js/
+resources/css/
+
+# Tests
+tests/
+phpunit.xml
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Laravel específicos
+*.log
+.phpunit.result.cache
