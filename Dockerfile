@@ -27,18 +27,18 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Configurar directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar archivos de dependencias primero (para mejor cache)
-COPY composer.json composer.lock package*.json ./
-
-# Instalar dependencias
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-RUN npm ci --silent
-
-# Copiar el resto de la aplicación
+# Copiar toda la aplicación primero
 COPY . .
+
+# Instalar dependencias (ahora que artisan existe)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN npm ci --silent
 
 # Build de assets frontend
 RUN npm run build
+
+# Ejecutar scripts de Composer después del build
+RUN composer run-script post-autoload-dump
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html \
