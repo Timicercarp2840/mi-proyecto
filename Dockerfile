@@ -1,4 +1,15 @@
-# Multi-stage build para optimizar el tamaño final
+# Stage para instalar dependencias PHP
+FROM composer:latest AS composer-stage
+
+WORKDIR /app
+
+# Copiar archivos de composer
+COPY composer.json composer.lock ./
+
+# Instalar dependencias de PHP
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+
+# Multi-stage build para el frontend
 FROM node:18-alpine AS node-builder
 
 WORKDIR /app
@@ -14,10 +25,8 @@ RUN npm ci --silent
 COPY resources/ ./resources/
 COPY public/ ./public/
 
-# Copiar solo los archivos necesarios de ziggy
-RUN mkdir -p vendor/tightenco/ziggy/dist
-COPY vendor/tightenco/ziggy/dist/ ./vendor/tightenco/ziggy/dist/
-COPY vendor/tightenco/ziggy/package.json ./vendor/tightenco/ziggy/
+# Copiar vendor desde el stage de composer (incluyendo ziggy)
+COPY --from=composer-stage /app/vendor/ ./vendor/
 
 # Build de assets
 RUN npm run build
@@ -47,20 +56,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Configurar directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar archivos de dependencias primero (para cache de Docker)
-COPY composer.json composer.lock ./
-
-# Instalar dependencias de PHP
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-
 # Copiar el resto de la aplicación
 COPY . .
 
+# Copiar dependencias de PHP desde el stage anterior
+COPY --from=composer-stage /app/vendor/ ./vendor/
+
 # Copiar assets compilados desde el stage anterior
 COPY --from=node-builder /app/public/build ./public/build
-
-# Ejecutar scripts post-install de Composer
-RUN composer run-script post-autoload-dump
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html \
