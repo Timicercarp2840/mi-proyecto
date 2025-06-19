@@ -7,7 +7,9 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 import { useDarkMode } from '@/composables/useDarkMode';
+import { useRoute } from '../composables/useRoute.js';
 
+const { route } = useRoute();
 const showingNavigationDropdown = ref(false);
 const { isDark, toggleDarkMode } = useDarkMode();
 </script>

@@ -32,6 +32,8 @@ export function useRoute() {
             'admin.modulos.update': (params) => `/admin/modulos/${params.modulo || params.id || ''}`,
             'admin.evaluaciones': '/admin/evaluaciones',
             'admin.evaluaciones.store': (params) => `/admin/modulos/${params.id_modulo || params.modulo || ''}/evaluaciones`,
+            'admin.desafios': '/admin/desafios',
+            'admin.estadisticas': '/admin/estadisticas',
             'progreso.actualizar': (params) => `/progreso/actualizar/${params.modulo || params.id || ''}`,
             'progreso.mi-progreso': '/progreso/mi-progreso',
             'evaluaciones.tomar': (params) => `/evaluaciones/tomar/${params.evaluacion || params.id || ''}`,
@@ -55,8 +57,31 @@ export function useRoute() {
                 url = url.replace(`{${key}}`, params[key]);
             });
         }
+          return url || '/';
+    };
+
+    // Agregar método current para verificar si la ruta actual coincide
+    route.current = (name) => {
+        if (typeof window !== 'undefined' && window.route && window.route.current) {
+            return window.route.current(name);
+        }
         
-        return url || '/';
+        // Fallback básico usando la URL actual
+        if (typeof window !== 'undefined' && window.location) {
+            const currentPath = window.location.pathname;
+            
+            // Verificaciones básicas para patrones comunes
+            if (name === 'dashboard' && currentPath === '/dashboard') return true;
+            if (name.includes('modulos') && currentPath.includes('/modulos')) return true;
+            if (name.includes('admin.modulos') && currentPath.includes('/admin/modulos')) return true;
+            if (name.includes('admin.usuarios') && currentPath.includes('/admin/usuarios')) return true;
+            if (name.includes('admin.desafios') && currentPath.includes('/admin/desafios')) return true;
+            if (name.includes('admin.estadisticas') && currentPath.includes('/admin/estadisticas')) return true;
+            if (name.includes('desafios') && currentPath.includes('/desafios')) return true;
+            if (name.includes('gamificacion') && currentPath.includes('/gamificacion')) return true;
+        }
+        
+        return false;
     };
 
     return {
