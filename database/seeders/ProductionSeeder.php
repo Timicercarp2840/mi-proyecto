@@ -59,11 +59,15 @@ class ProductionSeeder extends Seeder
         $estudiantes = User::where('rol', 'estudiante')->get();
         $modulos = Modulo::all();
 
+        $this->command->info('Encontrados ' . $estudiantes->count() . ' estudiantes y ' . $modulos->count() . ' módulos.');
+
         foreach ($estudiantes as $estudiante) {
             foreach ($modulos as $modulo) {
+                $this->command->info('Asignando módulo ID: ' . $modulo->id_modulo . ' al usuario ID: ' . $estudiante->id);
+                
                 Progreso::firstOrCreate([
                     'id_usuario' => $estudiante->id,
-                    'id_modulo' => $modulo->id,
+                    'id_modulo' => $modulo->id_modulo, // Usar explícitamente id_modulo
                 ], [
                     'completado' => false,
                     'fecha_inicio' => now(),

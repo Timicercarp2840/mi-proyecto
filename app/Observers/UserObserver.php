@@ -17,9 +17,7 @@ class UserObserver
         if ($user->rol === 'estudiante') {
             $this->asignarModulos($user);
         }
-    }
-
-    /**
+    }    /**
      * Asignar todos los módulos disponibles al usuario
      */
     private function asignarModulos(User $user): void
@@ -29,7 +27,7 @@ class UserObserver
         foreach ($modulos as $modulo) {
             Progreso::firstOrCreate([
                 'id_usuario' => $user->id,
-                'id_modulo' => $modulo->id,
+                'id_modulo' => $modulo->id_modulo, // Usar explícitamente id_modulo
             ], [
                 'completado' => false,
                 'fecha_inicio' => now(),
