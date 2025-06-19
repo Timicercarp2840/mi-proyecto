@@ -14,19 +14,22 @@ FROM node:18-alpine AS node-builder
 
 WORKDIR /app
 
-# Copiar archivos de configuración
+# Copiar archivos de configuración de Node primero
 COPY package*.json ./
+RUN npm ci --silent
+
+# Copiar archivos de configuración de Vite
 COPY vite.config.js tailwind.config.js postcss.config.js jsconfig.json ./
 
-# Instalar dependencias de Node
-RUN npm ci --silent
+# Copiar vendor desde el stage de composer (incluyendo ziggy)
+COPY --from=composer-stage /app/vendor/ ./vendor/
 
 # Copiar archivos fuente
 COPY resources/ ./resources/
 COPY public/ ./public/
 
-# Copiar vendor desde el stage de composer (incluyendo ziggy)
-COPY --from=composer-stage /app/vendor/ ./vendor/
+# Debug: Verificar que los archivos están presentes
+RUN ls -la ./resources/js/ && ls -la ./vendor/tightenco/ziggy/
 
 # Build de assets
 RUN npm run build
