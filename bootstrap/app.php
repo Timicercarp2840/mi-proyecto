@@ -18,6 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
+        
+        // Force HTTPS in production
+        if (app()->environment('production')) {
+            $middleware->web(prepend: [
+                \App\Http\Middleware\ForceHttps::class,
+            ]);
+        }
 
         // Trust proxies for HTTPS detection in production
         $middleware->trustProxies(at: ['*']);

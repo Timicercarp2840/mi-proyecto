@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         // Force HTTPS in production
         if (app()->environment('production')) {
             $appUrl = config('app.url');
+            
+            // Force HTTPS scheme regardless of proxy detection
             URL::forceScheme('https');
             URL::forceRootUrl($appUrl);
             
@@ -40,12 +42,19 @@ class AppServiceProvider extends ServiceProvider
                 Vite::useHotFile(public_path('hot'));
             }
             
+            // Trust ALL proxies for Render.com and force HTTPS detection
+            Request::setTrustedProxies(['*'], Request::HEADER_X_FORWARDED_ALL);
+            
+            // Force HTTPS detection even if proxy headers are missing
+            if (!request()->isSecure()) {
+                request()->server->set('HTTPS', 'on');
+                request()->server->set('SERVER_PORT', 443);
+                request()->server->set('HTTP_X_FORWARDED_PROTO', 'https');
+            }
+            
             // Configure Vite to use correct URL
             Vite::useStyleTagAttributes(['data-turbo-track' => 'reload']);
             Vite::useScriptTagAttributes(['data-turbo-track' => 'reload']);
-            
-            // Trust proxies for Render.com
-            Request::setTrustedProxies(['*'], Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO);
         }
 
         // Registrar observers

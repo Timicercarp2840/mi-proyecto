@@ -18,6 +18,8 @@ services:
         value: false
       - key: APP_URL
         value: https://sable-app.onrender.com
+      - key: FORCE_HTTPS
+        value: true
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
